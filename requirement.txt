@@ -1,0 +1,3 @@
+#using pip install -r requirement.txt
+request
+bs4
