@@ -58,8 +58,8 @@ class Application(tk.Tk):
 				sys.exit()
 			with open('config.ini', 'w') as configfile:
 				cfg.write(configfile)
-
 			login_window.destroy()
+			self.start()
 		else:
 			showerror("Error", "請輸入帳號和密碼！")
 			login_window.destroy()
@@ -74,8 +74,7 @@ class Application(tk.Tk):
 		login.title('登入設定')
 
 		# user information
-		tk.Label(login, text='※僅限在職教師及在學學生使用※').grid(
-			row=0, column=1, padx=10, pady=10)
+		tk.Label(login, text='※僅限在職教師及在學學生使用※').grid(row=0, column=1, padx=10, pady=10)
 		tk.Label(login, text='Username:').grid(row=1, column=0)
 		tk.Label(login, text='Password:').grid(row=2, column=0)
 		tk.Label(login, text='Download:').grid(row=3, column=0)
@@ -93,11 +92,12 @@ class Application(tk.Tk):
 		set_download.grid(row=3, column=2)
 		entry_download.insert(0, os.path.join(os.getcwd(), 'CourseFiles'))
 
-
-
 		# login button
 		btn_login = tk.Button(login, text='儲存設定檔', command=lambda: self.save(login, entry_usr_name.get(), entry_usr_pwd.get(), entry_download.get()))
 		btn_login.grid(row=1, column=2, padx=10, pady=10)
+		
+		login.bind("<Return>",lambda e: self.save(login, entry_usr_name.get(), entry_usr_pwd.get(), entry_download.get()))
+		
 		login.mainloop()
 		return 0
 
@@ -111,6 +111,7 @@ class Application(tk.Tk):
 	# 更新作業列表
 	def update_homeworks(self):
 		self.HW_label.config(text = '作業(更新中...請稍候)')
+		self.update()
 		handler = self.handler
 		self.hw_id = []
 		self.hw = []
@@ -120,7 +121,9 @@ class Application(tk.Tk):
 			for hw in hws:
 				self.homework_list_box.insert('end', "{0} - {1}".format(self.courses[crsno], hw['title']))
 				self.hw_id.append("homeworkID")
+				self.update()
 		self.HW_label.config(text = '作業(已更新)')
+		self.update()
 		# for hw_num, hw_nam in self.hw.items():
 		# self.courses_list_box.insert('end', course_nam)
 		# self.courses_id.append(course_num)
@@ -142,7 +145,6 @@ class Application(tk.Tk):
 		if (not handler.is_logined):
 			self.labelframe.config(text = "登入失敗，請重新登入。")
 			self.setting()
-			self.start()
 			return
 		self.labelframe.config(text = "歡迎回來～目前為 {0} 學年度 {1} 學期".format(handler.currentAcy, handler.currentSem))
 		self.courses_id = []
