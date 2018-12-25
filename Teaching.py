@@ -1,4 +1,5 @@
 import sys, os
+from tkinter import ttk
 import requests
 import urllib.request
 from urllib import parse
@@ -27,6 +28,7 @@ class Teaching:
 	
 	def __init__(self, login_acc, login_pwd):
 		print("Debug: INIT Class-Teaching")
+		self.is_logined = False
 		self.ACCOUNT = login_acc
 		self.PASSWRD = login_pwd
 		# Config init
@@ -88,11 +90,13 @@ class Teaching:
 			m = re.match('工作學年度：(\d+)學年度/([上下])學期', acyResp.text.strip())
 			self.currentAcy = m.group(1)
 			self.currentSem = m.group(2)
+			self.is_logined = True
 			print('Info : 登入成功！')
 			print('Info : 目前為' + self.currentAcy + '學年度' + self.currentSem + '學期')
 		else:
+			self.is_logined = False
 			print('Error: 登入失敗！請確認您的帳號或密碼。(HTML元素錯誤)')
-			sys.exit()
+			# sys.exit()
 
 	def getCourses(self):
 		print("Info : 取得課程列表")
@@ -111,7 +115,7 @@ class Teaching:
 				self.courses[courseNumber]= courseName
 		except (AttributeError):
 			print('Error: 網頁異常(AttributeError)')
-			sys.exit()
+			# sys.exit()
 		return self.courses
 
 	def getHomeWorks(self):
@@ -127,7 +131,7 @@ class Teaching:
 			self.homeworks[crsno] = []
 			for tr in trs:
 				tds = tr.findAll("td")
-				if(tds[7].text.strip() != '已繳 Done!'): # 修改這裡以測試所有HW之顯示
+				if(tds[7].text.strip() != '已繳 Done~!'): # 修改這裡以測試所有HW之顯示
 					newHW = {'title':tds[1].text.strip(), 'content':tds[2].text.strip(), 'deadline': tds[5].text.strip()}
 					self.homeworks[crsno].append(newHW)
 			
@@ -157,7 +161,7 @@ class Teaching:
 				requestForm[id] = field.get('value')
 			else:
 				print('Error: 網站錯誤. 原因: 欄位異常(' + id + ')')
-				sys.exit()
+				# sys.exit()
 		
 		requestForm['__EVENTTARGET'] = "ComboBox_Crsno"
 		requestForm['__EVENTARGUMENT'] = '{"Command":"Select","Index":0}'
@@ -176,7 +180,7 @@ class Teaching:
 				requestForm['RadScriptManager1_TSM'] = val
 			else:
 				print('Error: 網站錯誤. 原因: 欄位異常(拿RadScriptManager1_TSM參數)')
-				sys.exit()
+				# sys.exit()
 		
 		self.HTTPRES = self.SESSION.post(self.WEBROOT + 'Course/materials/CatalogMenu.aspx?stype=S', data=requestForm, cookies=self.HTTPRES.cookies)
 		soup = BeautifulSoup(self.HTTPRES.text, "html.parser")
@@ -201,12 +205,14 @@ class Teaching:
 			print('Error: 網站錯誤. 原因: 欄位異常(RadTreeView_Catalog)')
 			sys.exit()
 
-	def downloadFiles(self, files):
+	def downloadFiles(self, files, labelframe, progress_file, progress_total):
 		print('Info : 下載 ' + str(len(files)) + ' 個檔案')
 		total_file_count = len(files)
 		downloaded_count = 1
 		#逐一下載檔案
 		for file in files:
+			progress_total['value'] = downloaded_count / total_file_count * 100
+			labelframe.update()
 			if ( not file['url'].startswith('./CatalogView.aspx?') ):
 				print('Error: Download URL error')
 				continue
@@ -236,6 +242,8 @@ class Teaching:
 					debug_message = "Debug: [{0:2}/{1:2}] {2:>8} [Exixts.]{3}".format(downloaded_count, total_file_count, file_size, file_name)
 					print(debug_message)
 					downloaded_count += 1
+					progress_file['value'] = 100
+					labelframe.update()
 					continue
 				#開始下載檔案
 				with open(dest_file, 'wb') as f:
@@ -257,22 +265,11 @@ class Teaching:
 						status += file_name
 						status += chr(13)
 						print(status, end="")
+						progress_file['value'] = file_size_dl * 100 / file_size
+						labelframe.update()
 			print()
 			downloaded_count += 1
 		return 0
-	
-	def test(self):
-		for key, data in self.courseConf.items():
-			print(key)
-			print(" is ")
-			print(data)
-		
-		print(self.cfg.sections())
-
-			# self.cfg.set("Section", "key", "value")
-			# self.cfg.write(open('config.ini', 'wb'))
-
-		
 		
 		
 		

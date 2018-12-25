@@ -135,7 +135,7 @@ def download_file():
     print(lb2.get(sel_course[0]))
     import time
     for i in range(100):
-        progress['value'] = i+1
+        progress['value'] = i + 1
         labelframe.update_idletasks()
         time.sleep(0.1)
 
