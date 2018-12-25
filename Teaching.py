@@ -131,7 +131,7 @@ class Teaching:
 			self.homeworks[crsno] = []
 			for tr in trs:
 				tds = tr.findAll("td")
-				if(tds[7].text.strip() != '已繳 Done~!'): # 修改這裡以測試所有HW之顯示
+				if(tds[7].text.strip() != '已繳 Done'): # 修改這裡以測試所有HW之顯示
 					newHW = {'title':tds[1].text.strip(), 'content':tds[2].text.strip(), 'deadline': tds[5].text.strip()}
 					self.homeworks[crsno].append(newHW)
 			

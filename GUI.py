@@ -34,7 +34,7 @@ class Application(tk.Tk):
 		print(str(bytearray(key)))
 
 		if account_name is not '' and account_password is not '':
-			print("Debug: 輸入帳號：{0}, 密碼:{1}, 存檔目錄:{2}".format(account_name, account_password, download_dict))
+			# print("Debug: 輸入帳號：{0}, 密碼:{1}, 存檔目錄:{2}".format(account_name, account_password, download_dict))
 			# Check dictionary
 			try:
 			    if (not os.path.exists(download_dict)):
@@ -48,6 +48,8 @@ class Application(tk.Tk):
 			try:
 				cfg = ConfigParser()
 				cfg.read('config.ini')
+				cfg['default'] = {}
+				cfg['save'] = {}
 				cfg['default']['path'] = download_dict
 				cfg['save']['username'] = account_name
 				cfg['save']['password'] = account_password
