@@ -143,7 +143,7 @@ class Teaching:
 				print('Debug: "' + self.courses[crsno] + '" 未繳作業: ' + hw['title'])
 		if (not has_hw):
 			print("Debug: 沒有未交作業")
-			return []
+			return {}
 		return self.homeworks
 
 	def getFiles(self, crsno):

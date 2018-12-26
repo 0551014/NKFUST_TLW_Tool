@@ -114,7 +114,7 @@ class Application(tk.Tk):
 		self.update()
 		handler = self.handler
 		self.hw_id = []
-		self.hw = []
+		self.hw = {}
 		self.hw = handler.getHomeWorks()
 		self.homework_list_box.delete(0, tk.END)
 		for crsno, hws in self.hw.items():
@@ -122,7 +122,10 @@ class Application(tk.Tk):
 				self.homework_list_box.insert('end', "{0} - {1}".format(self.courses[crsno], hw['title']))
 				self.hw_id.append("homeworkID")
 				self.update()
-		self.HW_label.config(text = '作業(已更新)')
+		if (len(self.hw) == 0):
+			self.HW_label.config(text = '作業(已更新): 沒有未交作業~')
+		else:
+			self.HW_label.config(text = '作業(已更新): 尚有未交作業!')
 		self.update()
 		# for hw_num, hw_nam in self.hw.items():
 		# self.courses_list_box.insert('end', course_nam)
