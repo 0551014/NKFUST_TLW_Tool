@@ -143,6 +143,7 @@ class Application(tk.Tk):
 			login_pwd = cfg['save']['password']
 		except (KeyError):
 			self.setting()
+			return
 		self.handler = Teaching(login_acc, login_pwd)
 		handler = self.handler
 		if (not handler.is_logined):
