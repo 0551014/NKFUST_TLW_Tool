@@ -157,7 +157,7 @@ class Application(tk.Tk):
 		for course_num, course_nam in self.courses.items():
 			self.courses_list_box.insert('end', course_nam)
 			self.courses_id.append(course_num)
-
+		self.download_teach_button.config(state = 'active')
 		self.update()
 		self.thread_it(self.update_homeworks())
 		return 0
@@ -227,8 +227,8 @@ class Application(tk.Tk):
 		update_Hw_button.grid(row=2, column=0, padx=5, pady=5)
 
 		# Download teach button
-		download_teach_button = tk.Button(self.labelframe, text='下載所選教材', command=lambda: self.download())
-		download_teach_button.grid(row=2, column=1)
+		self.download_teach_button = tk.Button(self.labelframe, text='下載所選教材', command=lambda: self.download(), state='disabled')
+		self.download_teach_button.grid(row=2, column=1)
 
 		# Progressbar(File)
 		self.progress_file = ttk.Progressbar(self.labelframe, orient=tk.HORIZONTAL, length=150, mode='determinate')

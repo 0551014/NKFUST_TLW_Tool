@@ -111,7 +111,13 @@ class Teaching:
 			for tr in trs:
 				courseNumber = tr.findAll("td")[1].text.strip()
 				courseName   = tr.find(id=re.compile('^ContentPlaceHolder_MainContent_GridView_Show_HyperLink_Course_'))
-				courseName   = courseName.prettify().split('<br/>')[0].split('\n')[1].strip() # 去除煩人的英文及空格
+				# print(courseName.prettify())
+				if ("(停修 Course Withdraw)" in courseName.prettify()):
+					courseName = courseName.prettify().split('<font color="red">')[1].split('<br/>')[0].strip() # 去除煩人的英文及空格
+					courseName = "[停修]" + courseName
+				else:
+					courseName   = courseName.prettify().split('<br/>')[0].split('\n')[1].strip() # 去除煩人的英文及空格
+				print(courseName)
 				self.courses[courseNumber]= courseName
 		except (AttributeError):
 			print('Error: 網頁異常(AttributeError)')
