@@ -51,7 +51,7 @@ class Teaching:
 	def login(self):
 		print('Info : 進入登入程序')
 
-		ASPSession = ['__EVENTTARGET','__EVENTARGUMENT','__VIEWSTATE','__VIEWSTATEGENERATOR','__PREVIOUSPAGE','__EVENTVALIDATION']
+		ASPSession = ['__VIEWSTATE','__VIEWSTATEGENERATOR','__EVENTVALIDATION']
 		headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36',
